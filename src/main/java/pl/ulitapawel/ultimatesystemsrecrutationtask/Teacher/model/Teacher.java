@@ -20,7 +20,7 @@ public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @NotEmpty(message = "Name cannot be empty!")
     @Size(min = 2, message = "Name has to have at least 2 characters")
