@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
-    Teacher findByNameContains(String name);
+    List<Teacher> findAllByNameContains(String name);
 
-    Teacher findBySurnameContains(String Surname);
+    List<Teacher> findAllBySurnameContains(String Surname);
 
-    Teacher findByNameContainsAndSurnameContains(String name, String Surname);
+    List<Teacher> findAllByNameContainsAndSurnameContains(String name, String Surname);
 
     @Query("SELECT s FROM Student s JOIN Teacher t WHERE t.id = :teacherId")
     List<Student> findAllStudentsForTeacher(long teacherId);

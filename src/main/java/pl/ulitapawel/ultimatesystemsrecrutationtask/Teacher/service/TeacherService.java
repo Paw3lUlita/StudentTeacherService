@@ -1,6 +1,8 @@
 package pl.ulitapawel.ultimatesystemsrecrutationtask.Teacher.service;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.model.Student;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.repository.StudentRepository;
@@ -24,16 +26,23 @@ public class TeacherService {
     }
 
     @Transactional
-    public Teacher findByName(String name){
-        return teacherRepository.findByNameContains(name);
+    public List<Teacher> findAllByName(String name){
+        return teacherRepository.findAllByNameContains(name);
     }
 
-    @Transactional Teacher findBySurname(String surname){
-        return teacherRepository.findBySurnameContains(surname);
+    @Transactional
+    public List<Teacher> findAllBySurname(String surname){
+        return teacherRepository.findAllBySurnameContains(surname);
     }
 
-    @Transactional Teacher findByNameAndSurname(String name, String surname){
-        return teacherRepository.findByNameContainsAndSurnameContains(name, surname);
+    @Transactional
+    public List<Teacher> findAllByNameAndSurname(String name, String surname){
+        return teacherRepository.findAllByNameContainsAndSurnameContains(name, surname);
+    }
+
+    @Transactional
+    public Teacher findById(long teacherId){
+        return teacherRepository.findById(teacherId).orElseThrow();
     }
 
     @Transactional
@@ -58,8 +67,37 @@ public class TeacherService {
     }
 
     @Transactional
-    public void updateTeacher(Teacher teacher){
-        teacherRepository.save(teacher);
+    public void updateTeacher(long teacherId, UpdateTeacherCommand teacherToUpdate){
+
+        Teacher actualTeacher = teacherRepository.findById(teacherId).orElseThrow();
+
+        if(teacherToUpdate.getName() != null) {
+            actualTeacher.setName(teacherToUpdate.getName());
+        }
+        if(teacherToUpdate.getSurname() != null) {
+            actualTeacher.setSurname(teacherToUpdate.getSurname());
+        }
+        if(teacherToUpdate.getAge() >= 18) {
+            actualTeacher.setAge(teacherToUpdate.getAge());
+        }
+        if(teacherToUpdate.getEmail() != null) {
+            actualTeacher.setEmail(teacherToUpdate.getEmail());
+        }
+
+
+        teacherRepository.save(actualTeacher);
+    }
+
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class UpdateTeacherCommand {
+        private String name;
+        private String surname;
+        private int age;
+        private String email;
+        private String subject;
     }
 
     @Transactional
@@ -67,4 +105,8 @@ public class TeacherService {
         teacherRepository.deleteById(id);
     }
 
+
+
 }
+
+
