@@ -30,7 +30,7 @@ public class Student {
     @Size(min = 2, message = "Surname has to have at least 2 characters")
     private String surname;
 
-    @NotEmpty(message = "Age cannot be empty!")
+
     @Min(value = 2, message = "Age must be greater than 18")
     private int age;
 

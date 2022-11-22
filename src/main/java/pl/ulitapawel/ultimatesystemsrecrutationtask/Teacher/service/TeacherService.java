@@ -3,6 +3,8 @@ package pl.ulitapawel.ultimatesystemsrecrutationtask.Teacher.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.model.Student;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.repository.StudentRepository;
@@ -21,23 +23,23 @@ public class TeacherService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public List<Teacher> findAll() {
-        return teacherRepository.findAll();
+    public Page<Teacher> findAll(Pageable pageable) {
+        return teacherRepository.findAll(pageable);
     }
 
     @Transactional
-    public List<Teacher> findAllByName(String name){
-        return teacherRepository.findAllByNameContains(name);
+    public Page<Teacher> findAllByName(String name, Pageable pageable){
+        return teacherRepository.findAllByNameContains(name,  pageable);
     }
 
     @Transactional
-    public List<Teacher> findAllBySurname(String surname){
-        return teacherRepository.findAllBySurnameContains(surname);
+    public Page<Teacher> findAllBySurname(String surname, Pageable pageable){
+        return teacherRepository.findAllBySurnameContains(surname, pageable);
     }
 
     @Transactional
-    public List<Teacher> findAllByNameAndSurname(String name, String surname){
-        return teacherRepository.findAllByNameContainsAndSurnameContains(name, surname);
+    public Page<Teacher> findAllByNameAndSurname(String name, String surname, Pageable pageable){
+        return teacherRepository.findAllByNameContainsAndSurnameContains(name, surname, pageable);
     }
 
     @Transactional
@@ -67,7 +69,7 @@ public class TeacherService {
     }
 
     @Transactional
-    public void updateTeacher(long teacherId, UpdateTeacherCommand teacherToUpdate){
+    public void updateTeacher(long teacherId, Teacher teacherToUpdate){
 
         Teacher actualTeacher = teacherRepository.findById(teacherId).orElseThrow();
 
@@ -83,28 +85,15 @@ public class TeacherService {
         if(teacherToUpdate.getEmail() != null) {
             actualTeacher.setEmail(teacherToUpdate.getEmail());
         }
-
-
         teacherRepository.save(actualTeacher);
     }
 
 
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public static class UpdateTeacherCommand {
-        private String name;
-        private String surname;
-        private int age;
-        private String email;
-        private String subject;
-    }
 
     @Transactional
     public void deleteTeacher(long id){
         teacherRepository.deleteById(id);
     }
-
 
 
 }

@@ -2,6 +2,8 @@ package pl.ulitapawel.ultimatesystemsrecrutationtask.Student.service;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.model.Student;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.repository.StudentRepository;
@@ -19,23 +21,28 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public List<Student> findAll() {
-        return studentRepository.findAll();
+    public Page<Student> findAll(Pageable pageable) {
+        return studentRepository.findAll(pageable);
     }
 
     @Transactional
-    public Student findByName(String name) {
-        return studentRepository.findByNameContains(name);
+    public Page<Student> findAllByName(String name, Pageable pageable) {
+        return studentRepository.findByNameContains(name, pageable);
     }
 
     @Transactional
-    public Student findBySurname(String surname) {
-        return studentRepository.findBySurnameContains(surname);
+    public Page<Student> findAllBySurname(String surname, Pageable pageable) {
+        return studentRepository.findBySurnameContains(surname, pageable);
     }
 
     @Transactional
-    public Student findByNameAndSurname(String name, String surname) {
-        return studentRepository.findByNameContainsAndSurnameContains(name, surname);
+    public Page<Student> findAllByNameAndSurname(String name, String surname, Pageable pageable) {
+        return studentRepository.findByNameContainsAndSurnameContains(name, surname, pageable);
+    }
+
+    @Transactional
+    public Student findById(long studentId){
+        return studentRepository.findById(studentId).orElseThrow();
     }
 
     @Transactional
@@ -60,8 +67,23 @@ public class StudentService {
     }
 
     @Transactional
-    public void updateStudent(Student student) {
-        studentRepository.save(student);
+    public void updateStudent(long studentId, Student studentToUpdate) {
+        Student actualStudent = studentRepository.findById(studentId).orElseThrow();
+
+        if(studentToUpdate.getName() != null) {
+            actualStudent.setName(studentToUpdate.getName());
+        }
+        if(studentToUpdate.getSurname() != null) {
+            actualStudent.setSurname(studentToUpdate.getSurname());
+        }
+        if(studentToUpdate.getAge() >= 18) {
+            actualStudent.setAge(studentToUpdate.getAge());
+        }
+        if(studentToUpdate.getEmail() != null) {
+            actualStudent.setEmail(studentToUpdate.getEmail());
+        }
+        studentRepository.save(actualStudent);
+
     }
 
     @Transactional

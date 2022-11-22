@@ -1,6 +1,8 @@
 package pl.ulitapawel.ultimatesystemsrecrutationtask.Teacher.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.service.StudentService;
@@ -16,19 +18,19 @@ import java.util.Optional;
 @RequestMapping("teachers")
 public class TeacherController {
     private final TeacherService teacherService;
-    private final StudentService service;
+    private final StudentService studentService;
 
 
     @GetMapping
-    public List<Teacher> getAll(@RequestParam Optional<String> name, @RequestParam Optional<String> surname) {
+    public Page<Teacher> getAll(Pageable pageable, @RequestParam Optional<String> name, @RequestParam Optional<String> surname) {
         if(name.isEmpty() && surname.isEmpty() ) {
-            return teacherService.findAll();
+            return teacherService.findAll(pageable);
         } else if (name.isPresent() && surname.isEmpty()){
-            return teacherService.findAllByName(name.get());
+            return teacherService.findAllByName(name.get(), pageable);
         } else if (name.isEmpty()){
-            return teacherService.findAllBySurname(surname.get());
+            return teacherService.findAllBySurname(surname.get(), pageable);
         }else{
-            return teacherService.findAllByNameAndSurname(name.get(), surname.get());
+            return teacherService.findAllByNameAndSurname(name.get(), surname.get(), pageable);
         }
     }
 
@@ -45,7 +47,7 @@ public class TeacherController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateTeacher(@PathVariable long id, @RequestBody TeacherService.UpdateTeacherCommand teacherToUpdate) {
+    public void updateTeacher(@PathVariable long id, @RequestBody Teacher teacherToUpdate) {
         teacherService.updateTeacher(id, teacherToUpdate);
     }
 
