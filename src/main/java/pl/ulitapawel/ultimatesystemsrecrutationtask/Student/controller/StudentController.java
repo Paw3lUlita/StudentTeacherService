@@ -38,6 +38,11 @@ public class StudentController {
         return studentService.findById(id);
     }
 
+    @GetMapping("{id}/teachers")
+    public Page<Teacher> findAllTeachersForStudents(@PathVariable long id, Pageable pageable){
+        return studentService.findAllTeachersForStudent(id, pageable);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addStudent(@RequestBody Student studentToAdd){
@@ -48,6 +53,12 @@ public class StudentController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateStudent(@PathVariable long id, @RequestBody Student studentToUpdate) {
         studentService.updateStudent(id, studentToUpdate);
+    }
+
+    @PutMapping("/{studentId}/{teacherId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void addTeacherForStudent( @PathVariable long studentId, @PathVariable long teacherId){
+       studentService.addTeacherForStudent(teacherId, studentId);
     }
 
     @DeleteMapping("/{id}")

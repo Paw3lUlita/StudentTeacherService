@@ -1,8 +1,6 @@
 package pl.ulitapawel.ultimatesystemsrecrutationtask.Teacher.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Student.model.Student;
 
 import javax.persistence.*;
@@ -15,7 +13,8 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Teacher {
 
     @Id
@@ -40,7 +39,7 @@ public class Teacher {
     @NotEmpty(message = "Subject cannot be empty!")
     private String subject;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "teacher_student", joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<Student> students;

@@ -48,8 +48,9 @@ public class TeacherService {
     }
 
     @Transactional
-    public List<Student> findAllStudentsForTeacher(long teacherId){
-        return teacherRepository.findAllStudentsForTeacher(teacherId);
+    public Page<Student> findAllStudentsForTeacher(long teacherId, Pageable pageable){
+
+        return studentRepository.findAllByTeachers(teacherId, pageable);
     }
 
     @Transactional

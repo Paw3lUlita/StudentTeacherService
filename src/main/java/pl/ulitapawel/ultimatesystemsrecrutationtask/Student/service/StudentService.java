@@ -46,8 +46,8 @@ public class StudentService {
     }
 
     @Transactional
-    public List<Teacher> findAllTeachersForStudent(long studentId) {
-        return studentRepository.findAllTeachersForStudent(studentId);
+    public Page<Teacher> findAllTeachersForStudent(long studentId, Pageable pageable) {
+        return teacherRepository.findAllTeachersForStudent(studentId, pageable);
     }
 
     @Transactional
@@ -55,9 +55,9 @@ public class StudentService {
         Student student = studentRepository.findById(studentId).orElseThrow();
         Teacher teacher = teacherRepository.findById(teacherId).orElseThrow();
 
-        student.getTeachers().add(teacher);
+        teacher.getStudents().add(student);
 
-        studentRepository.save(student);
+        teacherRepository.save(teacher);
 
     }
 

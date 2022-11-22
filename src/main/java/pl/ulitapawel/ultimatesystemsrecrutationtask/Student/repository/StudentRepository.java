@@ -17,7 +17,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
 
     Page<Student> findByNameContainsAndSurnameContains(String name, String Surname, Pageable pageable);
 
-    @Query("SELECT t FROM Teacher t JOIN Student s WHERE s.id = :studentId")
-    List<Teacher> findAllTeachersForStudent(long studentId);
+    @Query(value = "SELECT s.id, s.age, s.email, s.name, s.faculty, s.surname FROM student s JOIN teacher_student ts on s.id = ts.student_id WHERE teacher_id = :teacherId", nativeQuery = true)
+    Page<Student> findAllByTeachers(long teacherId, Pageable pageable);
 
 }

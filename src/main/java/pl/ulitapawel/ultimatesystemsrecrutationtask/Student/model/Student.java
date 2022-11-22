@@ -1,8 +1,6 @@
 package pl.ulitapawel.ultimatesystemsrecrutationtask.Student.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.ulitapawel.ultimatesystemsrecrutationtask.Teacher.model.Teacher;
 
 import javax.persistence.*;
@@ -15,7 +13,8 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Student {
 
     @Id
@@ -41,6 +40,6 @@ public class Student {
     @NotEmpty(message = "Faculty cannot be empty")
     private String faculty;
 
-    @ManyToMany(mappedBy = "students")
-    private Set<Teacher> teachers;
+    /*@ManyToMany(mappedBy = "students")
+    private Set<Teacher> teachers;*/
 }
